@@ -1,9 +1,9 @@
-FUNCTION ConvertFromPrefixToSubnet {
-    PARAM (
+Function ConvertFromPrefixToSubnet {
+    Param (
         [Int]$PreffixLength
     )
 
-    IF ($($PreffixLength -GT 32) -OR $($PreffixLength -LT 0)) { Write-Host "Preffix Length must be between 0-32" }
+    If ($($PreffixLength -GT 32) -OR $($PreffixLength -LT 0)) { Write-Host "Preffix Length must be between 0-32" }
 
     $SubnetMask_ = New-Object System.Collections.Generic.List[System.Object]
 
@@ -13,19 +13,19 @@ FUNCTION ConvertFromPrefixToSubnet {
 
     $BitValues = 128, 64, 32, 16, 8, 4, 2, 1
 
-    IF ($Bytes -GT 0) {ForEach ($index in 1..$Bytes) { $SubnetMask_.Add(255) }}
+    If ($Bytes -GT 0) {ForEach ($index In 1..$Bytes) { $SubnetMask_.Add(255) }}
 
-    IF ($Bits -GT 0) {
+    If ($Bits -GT 0) {
         $sTotal = 0
-        ForEach ($index in 0..$($Bits-1)) {
+        ForEach ($index In 0..$($Bits-1)) {
             $sTotal = $BitValues[$index] + $sTotal
         }
         $SubnetMask_.Add($sTotal)
     }
     
-    WHILE ($SubnetMask_.ToArray().Length -NE 4) {
+    While ($SubnetMask_.ToArray().Length -NE 4) {
         $SubnetMask_.Add(0)
     }
 
-    RETURN $($SubnetMask_.ToArray() -Join ".")
+    Return $($SubnetMask_.ToArray() -Join ".")
 }
